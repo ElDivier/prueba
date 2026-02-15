@@ -1,0 +1,76 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para mi niña favorita</title>
+    <style>
+        body { background-color: #fce4ec; font-family: 'Arial', sans-serif; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; overflow: hidden; }
+        #pantalla-inicio { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #ff4081; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 100; color: white; cursor: pointer; text-align: center; }
+        .sobre { font-size: 80px; animation: latido 1.2s infinite; }
+        @keyframes latido { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+        .tarjeta { background: white; padding: 25px; border-radius: 25px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); text-align: center; max-width: 350px; width: 90%; display: none; z-index: 10; position: relative; }
+        .foto { width: 100%; height: 250px; object-fit: cover; border-radius: 15px; border: 4px solid #f8bbd0; margin-bottom: 15px; }
+        h1 { color: #d81b60; font-size: 1.5rem; margin-bottom: 5px; }
+        #dias { font-weight: bold; color: #ad1457; font-size: 1.1rem; margin-bottom: 15px; }
+        .mensaje { color: #880e4f; line-height: 1.6; font-size: 0.95rem; font-style: italic; margin-bottom: 20px; }
+        #btn-si { background: #ff4081; color: white; padding: 12px 25px; border: none; border-radius: 50px; font-size: 1rem; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(255, 64, 129, 0.4); }
+        .corazon { position: fixed; top: -10px; color: #ff4081; font-size: 20px; user-select: none; z-index: 5; animation: caer linear forwards; }
+        @keyframes caer { to { transform: translateY(105vh) rotate(360deg); } }
+    </style>
+</head>
+<body>
+    <div id="pantalla-inicio" onclick="comenzar()">
+        <div class="sobre">✉️</div>
+        <h2>Tienes un mensaje especial</h2>
+        <p>Toca para abrirlo, Eva</p>
+    </div>
+    <div id="player"></div>
+    <div class="tarjeta" id="mi-tarjeta">
+        <h1>Para: Eva ❤️</h1>
+        <img src="fotito.jpeg" class="foto">
+        <div id="dias">Cargando nuestra historia...</div>
+        <div class="mensaje">
+            "Desde que llegaste a mi vida supe que quería que fueras tú. Te agradezco a ti y a la vida por permitirme pasar mis días a tu lado; eres lo mejor que me ha pasado. Gracias por cada momento, mi amor. <br><b>Te amo 10 millones, Flaca. ❤️</b>"
+            <br><br><b>¿Me dejas ser tu 14 año a año?</b>
+        </div>
+        <button id="btn-si" onclick="aceptar()">¡SÍ, ACEPTO! 😍</button>
+    </div>
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script>
+        let player;
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                height: '0', width: '0', videoId: 'NbSzTi0d6pQ',
+                playerVars: { 'autoplay': 0, 'controls': 0, 'loop': 1, 'playlist': 'NbSzTi0d6pQ' },
+                events: { 'onReady': function(event) { console.log("Player listo"); } }
+            });
+        }
+        function comenzar() {
+            document.getElementById('pantalla-inicio').style.display = 'none';
+            document.getElementById('mi-tarjeta').style.display = 'block';
+            if (player && player.playVideo) { player.playVideo(); }
+            calcularDias();
+            setInterval(crearCorazon, 300);
+        }
+        function calcularDias() {
+            const inicio = new Date("2025-04-19");
+            const hoy = new Date();
+            const diff = hoy - inicio;
+            const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
+            document.getElementById('dias').innerText = "Llevamos " + dias + " días juntos ❤️";
+        }
+        function crearCorazon() {
+            const c = document.createElement('div');
+            c.classList.add('corazon');
+            c.innerText = '❤️';
+            c.style.left = Math.random() * 100 + 'vw';
+            c.style.animationDuration = Math.random() * 2 + 3 + 's';
+            document.body.appendChild(c);
+            setTimeout(() => { c.remove(); }, 5000);
+        }
+        function aceptar() { alert("¡Me haces el hombre más feliz! ❤️ Prometo cuidarte siempre."); }
+    </script>
+</body>
+</html>
