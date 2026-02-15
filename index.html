@@ -15,18 +15,23 @@
         h1 { color: #d81b60; font-size: 1.5rem; margin-bottom: 5px; }
         #dias { font-weight: bold; color: #ad1457; font-size: 1.1rem; margin-bottom: 15px; }
         .mensaje { color: #880e4f; line-height: 1.6; font-size: 0.95rem; font-style: italic; margin-bottom: 20px; }
-        #btn-si { background: #ff4081; color: white; padding: 12px 25px; border: none; border-radius: 50px; font-size: 1rem; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(255, 64, 129, 0.4); }
+        #btn-si { background: #ff4081; color: white; padding: 12px 25px; border: none; border-radius: 50px; font-size: 1rem; font-weight: bold; cursor: pointer; }
         .corazon { position: fixed; top: -10px; color: #ff4081; font-size: 20px; user-select: none; z-index: 5; animation: caer linear forwards; }
         @keyframes caer { to { transform: translateY(105vh) rotate(360deg); } }
     </style>
 </head>
 <body>
+
     <div id="pantalla-inicio" onclick="comenzar()">
         <div class="sobre">✉️</div>
         <h2>Tienes un mensaje especial</h2>
         <p>Toca para abrirlo, Eva</p>
     </div>
-    <div id="player"></div>
+
+    <audio id="miMusica" loop>
+        <source src="musica.mp3" type="audio/mpeg">
+    </audio>
+
     <div class="tarjeta" id="mi-tarjeta">
         <h1>Para: Eva ❤️</h1>
         <img src="fotito.jpeg" class="foto">
@@ -37,23 +42,27 @@
         </div>
         <button id="btn-si" onclick="aceptar()">¡SÍ, ACEPTO! 😍</button>
     </div>
-    <script src="https://www.youtube.com/iframe_api"></script>
+
     <script>
-        let player;
-        function onYouTubeIframeAPIReady() {
-            player = new YT.Player('player', {
-                height: '0', width: '0', videoId: 'NbSzTi0d6pQ',
-                playerVars: { 'autoplay': 0, 'controls': 0, 'loop': 1, 'playlist': 'NbSzTi0d6pQ' },
-                events: { 'onReady': function(event) { console.log("Player listo"); } }
-            });
-        }
         function comenzar() {
+            // Ocultar inicio y mostrar tarjeta
             document.getElementById('pantalla-inicio').style.display = 'none';
             document.getElementById('mi-tarjeta').style.display = 'block';
-            if (player && player.playVideo) { player.playVideo(); }
+            
+            // Configuración del audio
+            const audio = document.getElementById('miMusica');
+            
+            // --- AQUÍ ESTÁ EL VOLUMEN (0.5 es el 50%) ---
+            audio.volume = 0.5; 
+            
+            audio.play().catch(error => {
+                console.log("El navegador bloqueó el audio inicial:", error);
+            });
+            
             calcularDias();
             setInterval(crearCorazon, 300);
         }
+
         function calcularDias() {
             const inicio = new Date("2025-04-19");
             const hoy = new Date();
@@ -61,6 +70,7 @@
             const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
             document.getElementById('dias').innerText = "Llevamos " + dias + " días juntos ❤️";
         }
+
         function crearCorazon() {
             const c = document.createElement('div');
             c.classList.add('corazon');
@@ -70,7 +80,10 @@
             document.body.appendChild(c);
             setTimeout(() => { c.remove(); }, 5000);
         }
-        function aceptar() { alert("¡Me haces el hombre más feliz! ❤️ Prometo cuidarte siempre."); }
+
+        function aceptar() { 
+            alert("¡Me haces el hombre más feliz! ❤️ Prometo cuidarte siempre."); 
+        }
     </script>
 </body>
 </html>
